@@ -17,7 +17,7 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# IMPORTANT: Load your actual secret and email from environment variables
+# Loads actual secret and email from environment variables
 YOUR_SECRET = os.environ.get("QUIZ_SECRET")
 YOUR_EMAIL = os.environ.get("QUIZ_EMAIL")
 
