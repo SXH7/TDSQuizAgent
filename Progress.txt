@@ -1,0 +1,58 @@
+Initial Command
+
+curl -X POST -H "Content-Type: application/json" \
+-d '{
+  "email": "22f3002772@iitm.ds.study.ac.in",
+  "secret": "hollies",
+  "url": "https://tds-llm-analysis.s-anand.net/demo"
+}' \
+http://127.0.0.1:5001/
+
+Result (This is on the server console)
+
+Submission successful! Response: {'correct': True, 'reason': '', 'url': 'https://tds-llm-analysis.s-anand.net/demo-scrape?email=22f3002772%40iitm.ds.study.ac.in&id=4234', 'delay': None}
+Attempting to solve quiz at: https://tds-llm-analysis.s-anand.net/demo-scrape?email=22f3002772%40iitm.ds.study.ac.in&id=4234
+Error: Could not find submission URL in quiz page.
+
+Result (Client Terminal, the one i sent the initial command from)
+
+{
+  "final_status": "failed",
+  "initial_url": "https://tds-llm-analysis.s-anand.net/demo",
+  "message": "Quiz sequence failed",
+  "submission_history": [
+    {
+      "correct": true,
+      "delay": null,
+      "reason": "",
+      "url": "https://tds-llm-analysis.s-anand.net/demo-scrape?email=22f3002772%40iitm.ds.study.ac.in&id=4234"
+    },
+    {
+      "correct": false,
+      "reason": "Could not find submission URL"
+    }
+  ]
+}
+
+Server Console Output
+
+Attempting to solve quiz at: https://tds-llm-analysis.s-anand.net/demo
+Submitting answer to: https://tds-llm-analysis.s-anand.net/submit
+Payload: {
+  "email": "22f3002772@iitm.ds.study.ac.in",
+  "secret": "hollies",
+  "url": "https://tds-llm-analysis.s-anand.net/demo",
+  "answer": "anything you want"
+}
+Submission successful! Response: {'correct': True, 'reason': '', 'url': 'https://tds-llm-analysis.s-anand.net/demo-scrape?email=22f3002772%40iitm.ds.study.ac.in&id=4249', 'delay': None}
+Attempting to solve quiz at: https://tds-llm-analysis.s-anand.net/demo-scrape?email=22f3002772%40iitm.ds.study.ac.in&id=4249
+Found scrape URL: https://tds-llm-analysis.s-anand.net/demo-scrape-data?email=22f3002772@iitm.ds.study.ac.in
+Scraped answer: Secret code is 36892 and not 37779.
+Submitting answer to: https://tds-llm-analysis.s-anand.net/submit
+Payload: {
+  "email": "22f3002772@iitm.ds.study.ac.in",
+  "secret": "hollies",
+  "url": "https://tds-llm-analysis.s-anand.net/demo-scrape?email=22f3002772%40iitm.ds.study.ac.in&id=4249",
+  "answer": "Secret code is 36892 and not 37779."
+}
+Submission successful! Response: {'correct': False, 'reason': 'Secret mismatch', 'url': 'https://tds-llm-analysis.s-anand.net/demo-audio?email=22f3002772%40iitm.ds.study.ac.in&id=4250', 'delay': 1}
