@@ -202,7 +202,18 @@ def _solve_single_quiz(quiz_url: str, email: str, secret: str, context: dict = N
         context = {} # To hold transcribed audio, csv data, etc.
 
     with sync_playwright() as p:
-        browser = p.chromium.launch()
+        browser = p.chromium.launch(
+            args=[
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage', # This is important for limited shared memory environments
+                '--disable-accelerated-video-decode',
+                '--no-first-run',
+                '--no-zygote',
+                '--single-process', # Use a single process for the browser
+                '--disable-gpu'
+            ]
+        )
         page = browser.new_page()
 
         # Perception loop: Agent gathers information until it's ready to answer.
