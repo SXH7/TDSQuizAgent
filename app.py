@@ -23,39 +23,10 @@ YOUR_EMAIL = os.environ.get("QUIZ_EMAIL")
 
 genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
 
-def execute_python_code(code: str, csv_data: str = None) -> str:
-    """
-    Executes Python code and returns its output.
-    If csv_data is provided, it's made available as a pandas DataFrame 'df'.
-    """
-    local_vars = {}
-    if csv_data:
-        local_vars['pd'] = pd
-        local_vars['StringIO'] = StringIO
-        local_vars['df'] = pd.read_csv(StringIO(csv_data), header=None)
-    
-    try:
-        # Use exec to run the code, capturing stdout
-        output_capture = StringIO()
-        # Redirect stdout to our StringIO object
-        import sys
-        sys.stdout = output_capture
-        
-        exec(code, {}, local_vars)
-        
-        sys.stdout = sys.__stdout__ # Restore stdout
-        
-        result = output_capture.getvalue().strip()
-        if not result and 'df' in local_vars: # If no explicit print, try to get the last expression's value
-            # This is a heuristic: try to get the last line's evaluation if it's an expression
-            last_line = code.strip().split('\n')[-1]
-            try:
-                result = str(eval(last_line, {}, local_vars))
-            except Exception:
-                pass # Not an evaluable expression
-        return result
-    except Exception as e:
-        return f"Error executing code: {e}"
+# Load the Whisper model once when the application starts
+print("Loading Whisper model...")
+whisper_model = whisper.load_model("tiny")
+print("Whisper model loaded.")
 
 def get_next_action_from_llm(content: str, quiz_url: str, context: dict) -> dict:
     """
@@ -208,8 +179,7 @@ def _solve_single_quiz(quiz_url: str, email: str, secret: str, context: dict = N
                         tmp_audio_path = tmp_audio.name
                     
                     print("Transcribing audio... (This may take a moment)")
-                    model = whisper.load_model("tiny") # Use a small model for speed
-                    result = model.transcribe(tmp_audio_path)
+                    result = whisper_model.transcribe(tmp_audio_path)
                     transcribed_text = result["text"]
                     os.remove(tmp_audio_path)
 
